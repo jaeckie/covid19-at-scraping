@@ -2,10 +2,12 @@
 
 import re
 import os
+import time
+import schedule
 import pandas as pd
 import urllib.request
-
 from datetime import datetime
+
 
 def jsdata2dict(jsdata):
     """
@@ -30,7 +32,7 @@ def jsdata2dict(jsdata):
     return jsdict
 
 
-if __name__ == '__main__':
+def update_files():
     print('current working-dir: %s' % os.getcwd())
     base_url = 'https://info.gesundheitsministerium.at/'
     print('scraping data from: %s' % base_url)
@@ -93,4 +95,12 @@ if __name__ == '__main__':
           df.to_csv(filename, encoding='utf-8', mode='a', header=False) 
         
     print('data saved')
-   
+  
+    
+if __name__ == '__main__':
+    intervall = 10
+    print('scheduler with intervall %d' % intervall)
+    schedule.every(intervall).minutes.do(update_files)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)    

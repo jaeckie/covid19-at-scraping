@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
 
 import re
 import os
@@ -93,9 +88,9 @@ if __name__ == '__main__':
        df_dict[key] = df
        filename = 'covid19-at-%s.csv' % key
        if not os.path.isfile(filename):
-           df.to_csv(filename, sep='\t', encoding='utf-8')
+           df.to_csv(filename, encoding='utf-8')
        else:
-          df.to_csv(filename, sep='\t', encoding='utf-8', mode='a', header=False) 
+          df.to_csv(filename, encoding='utf-8', mode='a', header=False) 
         
     print('data saved')
    

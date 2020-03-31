@@ -32,7 +32,8 @@ def jsdata2dict(jsdata):
     return jsdict
 
 
-def update_files():
+#def update_files():
+if __name__ == '__main__':    
     print('current working-dir: %s' % os.getcwd())
     base_url = 'https://info.gesundheitsministerium.at/'
     print('scraping data from: %s' % base_url)
@@ -47,18 +48,19 @@ def update_files():
     
     # datetime
     # results between " "
-    r0 = re.compile(r'".*"') # r'\d{2}.d{2}.d{4}'
+    r0 = re.compile(r'LetzteAktualisierung = ".*"') # r'\d{2}.d{2}.d{4}'
     s0 = r0.search(data)
-    datetime_string = s0.group().replace('"', '')
+    #datetime_string = s0.group().replace('"', '')
+    datetime_string = s0.group().split(' = ')[-1].replace('"', '')
     dt = datetime.strptime(datetime_string, '%d.%m.%Y %H:%M.%S')
     print('last data update: %s' % dt)
     
     # TODO: compare datatime with current pandas dataframe   
     
     #r1 = re.compile('Erkrankungen = %d+;')
-    r1 = re.compile(r'\d+;')
+    r1 = re.compile(r'\d+.;')
     s1 = r1.search(data)
-    infections = int(s1.group().replace(';', ''))
+    infections = int(s1.group()[:-2])
 
     # urls for structured data
     urls = {'altersverteilung' : 'https://info.gesundheitsministerium.at/data/Altersverteilung.js',
@@ -97,10 +99,11 @@ def update_files():
     print('data saved')
   
     
-if __name__ == '__main__':
-    intervall = 10
-    print('scheduler with intervall %d' % intervall)
-    schedule.every(intervall).minutes.do(update_files)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)    
+# if __name__ == '__main__':
+#     print('instant call')
+    # intervall = 10
+    # print('scheduler with intervall %d' % intervall)
+    # schedule.every(intervall).minutes.do(update_files)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)    

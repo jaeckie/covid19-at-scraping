@@ -86,6 +86,10 @@ if __name__ == '__main__':
 
        # write dataframe for all dicts, add total cases and store
        df = pd.DataFrame.from_dict([res_dict])
+       # sort due to changes order from data
+       if key in ('bundesland', 'bezirke'):
+           df = df.reindex(sorted(df.columns), axis=1)
+       
        df['Zeit'] = dt
        df.set_index('Zeit', inplace=True)
        df['Erkrankungen_Sum'] = infections
